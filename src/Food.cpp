@@ -1,6 +1,5 @@
 #include "Food.h"
-#include <cstdlib>
-#include <typeinfo>
+
 
 #include <iostream>
 Food::Food(Grid &grid) : grid(grid)
@@ -14,10 +13,10 @@ Food::Food(Grid &grid) : grid(grid)
 
 void Food::GenerateNewFood()
 {
-	xPos = (float)(rand() % grid.GetRows()) * grid.GetCellWidth() + offset;
-	yPos = (float)(rand() % grid.GetColumns() * grid.GetCellHeight()) + offset;
-	foodRect.x = xPos;
-	foodRect.y = yPos;
+	Position randomPos = grid.GetRandomCell();
+	foodRect.x = (float) randomPos.x + offset;
+	foodRect.y = (float)randomPos.y + offset;
+
 }
 
 void Food::DrawFood() const

@@ -1,5 +1,7 @@
 #include "grid.h"
 #include <raylib.h>
+#include <random>
+
 
 
 Grid::Grid(int screenWidth, int screenHeight)
@@ -18,4 +20,13 @@ void Grid::Draw() const
 		}
 	}
 
+}
+
+Position Grid::GetRandomCell() const
+{
+
+	Position position;
+	position.x = (rand() % GetRows()) * GetCellWidth();
+	position.y = (rand() % GetColumns() * GetCellHeight());
+	return position;
 }

@@ -1,5 +1,10 @@
 #pragma once
 
+struct Position 
+{
+	float x;
+	float y;
+};
 
 class Grid
 {
@@ -11,6 +16,8 @@ public:
 	int GetColumns() const { return columns; }
 	int GetCellWidth() const { return cellWidth; }
 	int GetCellHeight() const { return cellHeight; }
+	Position GetRandomCell() const;
+	
 private:
 	int cellWidth;
 	int cellHeight;

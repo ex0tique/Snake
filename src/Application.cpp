@@ -1,6 +1,8 @@
 #include "Application.h"
 
 #include <iostream>
+#include <time.h>
+
 
 Application::Application(unsigned int screenWidth, unsigned int ScreenHeight)
 	: screenWidth(screenWidth), ScreenHeight(ScreenHeight)
@@ -9,6 +11,7 @@ Application::Application(unsigned int screenWidth, unsigned int ScreenHeight)
 	InitWindow(screenWidth, ScreenHeight, "Snake");
 	FPS = 60;
 	SetTargetFPS(FPS);
+	srand((unsigned int)time(0)); // Need for Randomness
 }
 
 void Application::Run()
@@ -31,6 +34,11 @@ void Application::Run()
 		{
 			Update(snake, food, grid, frameCount);
 			Draw(grid, snake, food);
+		}
+		else if (playAgain)
+		{
+			snake.CreateNewSnake();
+			playAgain = false;
 		}
 		else
 			GameOver();
@@ -95,7 +103,10 @@ void Application::HandelGameOverEvent(Rectangle &buttonPlayAgain, Rectangle &but
 	if (CheckCollisionPointRec(mousePoint, buttonPlayAgain))
 	{
 		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+		{
+			playAgain = true;
 			gameOver = false;
+		}
 	}
 	else if (CheckCollisionPointRec(mousePoint, buttonQuit))
 	{
@@ -129,6 +140,7 @@ void Application::Update(Snake &snake, Food &food, Grid& grid, int &frameCount)
 
 		if (snake.CheckCollision())
 			gameOver = true;
+
 		frameCount = 0;
 	}
 	else

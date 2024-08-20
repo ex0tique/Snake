@@ -13,7 +13,5 @@ public:
 private:
 	Grid grid;
 	Rectangle foodRect;
-	float xPos;
-	float yPos;
 	float offset;
 };

@@ -18,15 +18,16 @@ public:
 	void Update();
 	bool CheckCollision() const;
 	void SetDirection(int dir) { direction = dir; }
-	Rectangle CreateBodyPartRect(float x, float y, int width, int height);
+	Rectangle CreateBodyPartRect(float x, float y, float width, float height);
 	void AddBodyPart();
+	void CreateNewSnake();
 	int GetDirection() const { return direction; }
 	Rectangle GetHead() const { return head; }
 private:
 	Grid grid;
 	std::vector<std::pair<Rectangle, int>> body;
 	Rectangle head;
-	int bodyPartWidth;
-	int bodyPartHeight;
+	float bodyPartWidth;
+	float bodyPartHeight;
 	int direction;
 };
