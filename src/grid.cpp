@@ -16,7 +16,7 @@ void Grid::Draw() const
 	{
 		for (int column = 0; column < columns; column++)
 		{
-			DrawRectangle(column * cellWidth, row * cellHeight, cellWidth - 1 , cellHeight -1 , DARKGRAY);
+			DrawRectangleLines(column * cellWidth, row * cellHeight, cellWidth, cellHeight, BLACK);
 		}
 	}
 
@@ -26,7 +26,7 @@ Position Grid::GetRandomCell() const
 {
 
 	Position position;
-	position.x = (rand() % GetRows()) * GetCellWidth();
-	position.y = (rand() % GetColumns() * GetCellHeight());
+	position.x = float((rand() % GetRows()) * GetCellWidth());
+	position.y = float((rand() % GetColumns() * GetCellHeight()));
 	return position;
 }

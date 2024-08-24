@@ -17,7 +17,6 @@ Application::Application(unsigned int screenWidth, unsigned int ScreenHeight)
 void Application::Run()
 {
 	int frameCount = 0;
-	unsigned int gridSize = 30;
 	Grid grid(screenWidth, ScreenHeight);
 	Snake snake(grid);
 	Food food(grid);
@@ -122,10 +121,10 @@ void Application::HandelGameOverEvent(Rectangle &buttonPlayAgain, Rectangle &but
 void Application::Draw(Grid &grid, Snake &snake, Food &food) const
 {
 	BeginDrawing();
+	ClearBackground(DARKGRAY);
 	grid.Draw();
 	food.DrawFood();
 	snake.Draw();
-	ClearBackground(BLACK);
 	EndDrawing();
 }
 
@@ -134,7 +133,7 @@ void Application::Update(Snake &snake, Food &food, Grid& grid, int &frameCount)
 	HandelGameEvent(snake);
 	AutoPlay(snake, food);
 
-	if (frameCount > 60/60)
+	if (true)
 	{
 		if (food.IsEaten( snake.GetHead() ))
 		{
