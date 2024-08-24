@@ -78,7 +78,7 @@ void Snake::CreateNewSnake()
 	int offset = 3;
 	Position startPos = grid.GetRandomCell();
 
-	int startBodySize = 8;
+	int startBodySize = 5;
 
 	for (int i = 0; i < startBodySize; i++)
 	{
@@ -90,5 +90,14 @@ void Snake::CreateNewSnake()
 	head.y = body[0].first.y;
 	head.width = bodyPartWidth;
 	head.height = bodyPartHeight;
+}
+
+bool Snake::OutOfScreen()
+{
+	if (head.x < 0 || head.x > grid.GetRows() * grid.GetCellWidth()
+		|| head.y < 0 || head.y > grid.GetColumns() * grid.GetCellHeight())
+		return true;
+	else
+		return false;
 }
 

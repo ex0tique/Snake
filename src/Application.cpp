@@ -30,15 +30,15 @@ void Application::Run()
 			screenWidth = GetRenderWidth();
 			ScreenHeight = GetRenderHeight();
 		}
-		if (!gameOver)
-		{
-			Update(snake, food, grid, frameCount);
-			Draw(grid, snake, food);
-		}
 		else if (playAgain)
 		{
 			snake.CreateNewSnake();
 			playAgain = false;
+		}
+		if (!gameOver)
+		{
+			Update(snake, food, grid, frameCount);
+			Draw(grid, snake, food);
 		}
 		else
 			GameOver();
@@ -77,8 +77,10 @@ void Application::HandelGameEvent(Snake& snake)
 
 void Application::GameOver()
 {
-	Rectangle buttonPlayAgain{ 100, 450, 250, 75 };
-	Rectangle buttonQuit{ 500, 450, 250, 75 };
+	float buttonWidth{ float(screenWidth / 3)};
+	float buttonHeight{ float(ScreenHeight / 12 )};
+	Rectangle buttonPlayAgain{	(screenWidth / 10), (ScreenHeight / 2), buttonWidth, buttonHeight };
+	Rectangle buttonQuit{		(screenWidth - buttonWidth - (screenWidth / 10)), (ScreenHeight / 2), buttonWidth, buttonHeight };
 	DrawGameOverMenu(buttonPlayAgain, buttonQuit);
 	HandelGameOverEvent(buttonPlayAgain, buttonQuit);
 }
@@ -88,11 +90,13 @@ void Application::DrawGameOverMenu(Rectangle &buttonPlayAgain, Rectangle &button
 	BeginDrawing();
 	DrawText(TextFormat("Game Over"), 25 , ScreenHeight/2 - 150, screenWidth/6, RED);
 
+	float textSize = buttonPlayAgain.height * 0.8;
+
 	DrawRectangleRec(buttonPlayAgain, BLACK);
-	DrawText(TextFormat("Play again"), 100, 450, 50, WHITE);
+	DrawText(TextFormat("Play again"), buttonPlayAgain.x, buttonPlayAgain.y, textSize, WHITE);
 	
 	DrawRectangleRec(buttonQuit, BLACK);
-	DrawText(TextFormat("Quit"), 550, 450, 50, WHITE);
+	DrawText(TextFormat("Quit"), buttonQuit.x + buttonQuit.width/2 - textSize, buttonQuit.y , textSize, WHITE);
 
 	EndDrawing();
 }
@@ -136,9 +140,9 @@ void Application::Update(Snake &snake, Food &food, Grid& grid, int &frameCount)
 			snake.AddBodyPart();
 			food.GenerateNewFood();
 		}
-		snake.Update(); 
+		snake.Update();
 
-		if (snake.CheckCollision())
+		if (snake.CheckCollision() || snake.OutOfScreen())
 			gameOver = true;
 
 		frameCount = 0;

@@ -21,6 +21,6 @@ public:
 private:
 	int cellWidth;
 	int cellHeight;
-	int rows{32};
-	int columns{32};
+	int rows{16};
+	int columns{16};
 };

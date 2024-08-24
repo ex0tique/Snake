@@ -21,6 +21,7 @@ public:
 	Rectangle CreateBodyPartRect(float x, float y, float width, float height);
 	void AddBodyPart();
 	void CreateNewSnake();
+	bool OutOfScreen();
 	int GetDirection() const { return direction; }
 	Rectangle GetHead() const { return head; }
 private:
