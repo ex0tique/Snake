@@ -4,7 +4,7 @@
 #include "raylib.h"
 #include "grid.h"
 #include "Food.h"
-
+ 
 class Application
 {
 public:
@@ -16,6 +16,7 @@ public:
 	void HandelGameOverEvent(Rectangle &buttonPlayAgain, Rectangle &buttonQuit);
 	void Draw(Grid &grid, Snake &snake, Food &food) const;
 	void Update(Snake &snake, Food &food, Grid &grid, int &frameCount);
+	void AutoPlay(Snake& snake, Food& food);
 private:
 	unsigned int screenWidth;
 	unsigned int ScreenHeight;

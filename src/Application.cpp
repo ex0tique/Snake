@@ -22,7 +22,6 @@ void Application::Run()
 	Snake snake(grid);
 	Food food(grid);
 
-
 	while (!WindowShouldClose() && running)
 	{
 		if (IsWindowResized())
@@ -77,10 +76,10 @@ void Application::HandelGameEvent(Snake& snake)
 
 void Application::GameOver()
 {
-	float buttonWidth{ float(screenWidth / 3)};
-	float buttonHeight{ float(ScreenHeight / 12 )};
-	Rectangle buttonPlayAgain{	(screenWidth / 10), (ScreenHeight / 2), buttonWidth, buttonHeight };
-	Rectangle buttonQuit{		(screenWidth - buttonWidth - (screenWidth / 10)), (ScreenHeight / 2), buttonWidth, buttonHeight };
+	float buttonWidth{ (screenWidth / 3.0f)};
+	float buttonHeight{ (ScreenHeight / 12.0f )};
+	Rectangle buttonPlayAgain{	(screenWidth / 10.0f), (ScreenHeight / 2.0f), buttonWidth, buttonHeight };
+	Rectangle buttonQuit{		(screenWidth - buttonWidth - (screenWidth / 10.0f)), (ScreenHeight / 2.0f), buttonWidth, buttonHeight };
 	DrawGameOverMenu(buttonPlayAgain, buttonQuit);
 	HandelGameOverEvent(buttonPlayAgain, buttonQuit);
 }
@@ -90,13 +89,13 @@ void Application::DrawGameOverMenu(Rectangle &buttonPlayAgain, Rectangle &button
 	BeginDrawing();
 	DrawText(TextFormat("Game Over"), 25 , ScreenHeight/2 - 150, screenWidth/6, RED);
 
-	float textSize = buttonPlayAgain.height * 0.8;
+	int textSize = (int)(buttonPlayAgain.height * 0.8);
 
 	DrawRectangleRec(buttonPlayAgain, BLACK);
-	DrawText(TextFormat("Play again"), buttonPlayAgain.x, buttonPlayAgain.y, textSize, WHITE);
+	DrawText(TextFormat("Play again"), (int)buttonPlayAgain.x, (int)buttonPlayAgain.y, textSize, WHITE);
 	
 	DrawRectangleRec(buttonQuit, BLACK);
-	DrawText(TextFormat("Quit"), buttonQuit.x + buttonQuit.width/2 - textSize, buttonQuit.y , textSize, WHITE);
+	DrawText(TextFormat("Quit"), (int)(buttonQuit.x + buttonQuit.width/2 - textSize), (int)buttonQuit.y , textSize, WHITE);
 
 	EndDrawing();
 }
@@ -133,7 +132,9 @@ void Application::Draw(Grid &grid, Snake &snake, Food &food) const
 void Application::Update(Snake &snake, Food &food, Grid& grid, int &frameCount)
 {
 	HandelGameEvent(snake);
-	if (frameCount > 60 / 6)
+	AutoPlay(snake, food);
+
+	if (frameCount > 60/60)
 	{
 		if (food.IsEaten( snake.GetHead() ))
 		{
@@ -151,3 +152,39 @@ void Application::Update(Snake &snake, Food &food, Grid& grid, int &frameCount)
 		frameCount++;
 }
 
+void Application::AutoPlay(Snake& snake, Food& food)
+{
+	int direction{snake.GetDirection()};
+	Rectangle headRect = snake.GetHead();
+	Rectangle foodRect = food.GetFoodRect();
+
+	if (foodRect.x < headRect.x)
+		direction = LEFT;
+	else if (foodRect.x > headRect.x)
+		direction = RIGHT;
+	else if (foodRect.y < headRect.y)
+		direction = UP;
+	else if (foodRect.y > headRect.y)
+		direction = DOWN;
+	
+	Snake nextUpdateSnake = snake;
+	nextUpdateSnake.SetDirection(direction);
+	nextUpdateSnake.Update();
+	std::cout << "New State: " << "Collision: " << nextUpdateSnake.CheckCollision() << " Out Of Bound: " << nextUpdateSnake.OutOfScreen()
+		<< " Direction: " << direction << std::endl;
+	if (nextUpdateSnake.CheckCollision() || nextUpdateSnake.OutOfScreen())
+		std::cout << "Colision incoming..." << std::endl;
+
+	while (nextUpdateSnake.CheckCollision() || nextUpdateSnake.OutOfScreen())
+	{
+		if (direction >= 4)
+			direction = UP;
+		else
+			direction++;
+		nextUpdateSnake = snake; // go Back to previous state
+		nextUpdateSnake.SetDirection(direction);
+		nextUpdateSnake.Update();
+		std::cout << "changed direction to: " << direction << std::endl;
+	}
+	snake.SetDirection(direction);
+}
